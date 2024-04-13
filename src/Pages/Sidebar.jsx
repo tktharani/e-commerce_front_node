@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiHome, FiUsers } from 'react-icons/fi'; 
+import { FiShoppingCart, FiPlusCircle } from 'react-icons/fi';
 import axios from 'axios'; 
 import './Sidebar.css';
 import UserViewModal from './UserViewModal'; 
@@ -16,6 +17,7 @@ const Sidebar = () => {
   const [deleteUserId, setDeleteUserId] = useState(null); 
  const [showModal, setShowModal] = useState(false); // State for view modal
   const [selectedUser, setSelectedUser] = useState(null); // State to store the selected user for view modal
+  const [activeLink, setActiveLink] = useState('dashboard');
 
   
   useEffect(() => {
@@ -67,6 +69,10 @@ const Sidebar = () => {
     setSelectedUser(user);
     setShowModal(true);
   };
+
+  const handleSetActiveLink = (link) => {
+    setActiveLink(link);
+  };
   return (
     <div className="sidebar-container">
       <div className="sidebar">
@@ -74,31 +80,60 @@ const Sidebar = () => {
           <h3>Admin Dashboard</h3>
         </div>
         <ul className="sidebar-menu">
-          <li>
-            <Link to="/" className="sidebar-link">
+        <li>
+            <Link
+              to="/"
+              className={`sidebar-link ${activeLink === 'dashboard' ? 'active' : ''}`}
+              onClick={() => handleSetActiveLink('dashboard')}
+            >
               <FiHome className="sidebar-icon" />
               Dashboard
             </Link>
           </li>
           <li>
-            <Link to="/admin" className="sidebar-link">
+            <Link
+              to="/admin"
+              className={`sidebar-link ${activeLink === 'users' ? 'active' : ''}`}
+              onClick={() => handleSetActiveLink('users')}
+            >
               <FiUsers className="sidebar-icon" />
               Users
             </Link>
           </li>
-          {/* Other sidebar links */}
+          <li>
+              <Link
+                to="/admin"
+                className={`sidebar-link ${activeLink === 'products' ? 'active' : ''}`}
+                onClick={() => handleSetActiveLink('products')}
+              >
+                <FiShoppingCart className="sidebar-icon" />
+                Products
+              </Link>
+          </li>
+          <li>
+              <Link
+                to="/admin"
+                className={`sidebar-link ${activeLink === 'addProduct' ? 'active' : ''}`}
+                onClick={() => handleSetActiveLink('addProduct')}
+              >
+                <FiPlusCircle className="sidebar-icon" />
+                Add Product
+              </Link>
+            </li>
         </ul>
       </div>
+      {activeLink === 'users' && (
+        <div className="user-list">
+          <h4>All Users</h4>
+          <input
+            className="search-input"
+            type="text"
+            placeholder="Search by name..."
+            value={searchTerm}
+            onChange={handleSearch}
+          />
 
-      <div className="user-list">
-        <h4>All Users</h4>
-        <input
-          className='search-input'
-          type="text"
-          placeholder="Search by name..."
-          value={searchTerm}
-          onChange={handleSearch}
-        />
+      
         <table className="table">
           <thead>
             <tr>
@@ -164,8 +199,9 @@ const Sidebar = () => {
         </nav>
         </div>
       </div>
-      
-    </div>
+      )}
+      </div>  
+    
   );
 };
 
