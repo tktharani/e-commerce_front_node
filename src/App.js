@@ -3,9 +3,12 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import NavBar from './Pages/NavBar';
+import Sidebar from './Pages/Sidebar'
+import UserViewModal from './Pages/UserViewModal';
 import ProductList from './Pages/ProductList';
 import AddProduct from './Pages/AddProduct';
-import NavBar from './Pages/NavBar';
 
 function App() {
   return (
@@ -15,12 +18,10 @@ function App() {
        <NavBar />
        <Routes>
        
-       <Route path="/" element={<ProductList />}></Route>
-       <Route path="/add" element={<AddProduct />}></Route>
-       
-      
- 
-
+       <Route path="/" element={<ProductList />}/>
+       <Route path="/add" element={<AddProduct />}/>
+       <Route path="/admin" element={<Sidebar />}/>
+       <Route path="/users/view/:userId" element={UserViewModal} />
        </Routes>
        </BrowserRouter>
     </div>
