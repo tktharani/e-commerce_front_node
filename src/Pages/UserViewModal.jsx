@@ -29,6 +29,7 @@ const UserViewModal = ({ show, handleClose, userId }) => {
       <Modal.Body>
         {userData ? (
           <>
+            <p>UserId: {userData._id}</p>
             <p>Username: {userData.username}</p>
             <p>Email: {userData.email}</p>
             <p>Full Name: {userData.fullName}</p>
