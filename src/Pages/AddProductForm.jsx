@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { FiHome, FiUsers, FiShoppingCart, FiPlusCircle } from 'react-icons/fi';
 import './Sidebar.css';
@@ -69,6 +68,12 @@ const AddProductForm = ({ handleAddProduct }) => {
   const [image, setImage] = useState(null); // State for image file
 
   const [error, setError] = useState('');
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  const handleRemoveImage = () => {
+    setImage(null);
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,40 +88,41 @@ const AddProductForm = ({ handleAddProduct }) => {
       formData.append('description', description);
       formData.append('price', price);
       formData.append('category', category);
-      formData.append('image', image); // Append the image file to FormData
+      formData.append('uploaded_file', image); // Append the image file to FormData
 
-      const response = await axios.post('http://localhost:5000/product/insert', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Set content type for FormData
-        },
-      });
-      if (response.status === 200) {
-        setError('');
-        if (typeof handleAddProduct === 'function') {
-          handleAddProduct(); // Call the parent function to update the product list
-        }
-        // Clear the form fields
-        setProductName('');
-        setDescription('');
-        setPrice('');
-        setCategory('');
-        setImage(null);
-      } else {
-        setError('Error adding product.');
+      const response = await fetch('http://localhost:5000/product/upload', {
+      method: 'POST',
+      body: formData,
+    });
+     
+    if (response.ok) {
+      setError('');
+      if (typeof handleAddProduct === 'function') {
+        handleAddProduct(); // Call the parent function to update the product list
       }
-    } catch (error) {
-      console.error('Error adding product:', error);
-      setError('Error adding product.');
+      // Clear the form fields
+      setProductName('');
+      setDescription('');
+      setPrice('');
+      setCategory('');
+      setImage('');
+      alert('Product added successfully');
+    } else {
+      const text = await response.text(); // Get the response as text
+      setError(text || 'Error adding product.');
     }
-  };
-
+  } catch (error) {
+    console.error('Error adding product:', error);
+    setError('Error adding product.');
+  }
+};
   return (
     <div className="container mt-4" style={{ maxWidth: '600px', margin: '0 auto' }}>
       <div className="card" style={{ boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', borderRadius: '5px' }}>
         <div className="card-body">
           <h5 className="card-title mb-4">Add Product</h5>
           {error && <div className="alert alert-danger">{error}</div>}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
             {/* Form fields */}
             <div className="mb-3">
               <label htmlFor="productName" className="form-label">Product Name</label>
@@ -124,6 +130,7 @@ const AddProductForm = ({ handleAddProduct }) => {
                 type="text"
                 className="form-control"
                 id="productName"
+                name="productName"
                 value={productName}
                 onChange={(e) => setProductName(e.target.value)}
                 required
@@ -171,13 +178,19 @@ const AddProductForm = ({ handleAddProduct }) => {
               </select>
             </div>
             <div className="mb-3">
-              <label htmlFor="image" className="form-label">Image Upload</label>
+              {image && (
+                <div>
+                  <img src={URL.createObjectURL(image)} alt="Product" style={{ maxWidth: '100px', marginBottom: '10px' }} />
+                  <button type="button" className="btn btn-danger" onClick={handleRemoveImage}>Remove Image</button>
+                </div>
+              )}
+              <label className="form-label">Image Upload</label>
               <input
                 type="file"
                 className="form-control"
                 id="image"
+                name="uploaded_file"
                 onChange={(e) => setImage(e.target.files[0])} // Handle file change and update state
-                required
                 accept="image/*" // Accept only image files
                 style={{ width: '100%' }}
               />
