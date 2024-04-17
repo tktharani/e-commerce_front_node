@@ -1,7 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import NavBar from './Pages/NavBar';
@@ -11,16 +10,22 @@ import ProductList from './Pages/ProductList';
 
 import UserEditModal from './Pages/UserEditModal';
 import AddProductForm from './Pages/AddProductForm';
+import LoginModal from './Pages/LoginModal';
+import RegisterPage from './Pages/RegisterPage';
+
+
 
 function App() {
   return (
     <div className="App">
-      
-       <BrowserRouter>
        <NavBar />
-       <Routes>
        
+    <BrowserRouter>
+       <Routes>
        <Route path="/" element={<ProductList />}/>
+       <Route path="/login" element={LoginModal} />
+       <Route path="/register" element={<RegisterPage />}/>
+      
        <Route path="/add" Component={AddProductForm} />
  
        <Route path="/admin" element={<Sidebar />}/>
@@ -28,7 +33,9 @@ function App() {
        <Route path="/users/edit/:userId" element={UserEditModal} />
        </Routes>
        </BrowserRouter>
+  
     </div>
+       
   );
 }
 

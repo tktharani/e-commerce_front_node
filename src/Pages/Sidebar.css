@@ -6,9 +6,19 @@
 
 .sidebar {
   width: 250px;
-  /* background-color: #fff; */
-  background-color: #f4f4f4;
-  border-right: 1px solid #ddd;
+  background-color: #f0f0f0;
+  height: 100vh;
+  overflow-y: auto;
+  position: fixed;
+}
+
+.user-list {
+  margin-left: 250px;
+  padding: 20px;
+}
+
+.add-product-form {
+  margin-left: 250px;
   padding: 20px;
 }
 
@@ -29,7 +39,6 @@
 }
 
 .sidebar-link:hover {
-  /* background-color: #f4f4f4; */
   background-color: #ddd;
 }
 
@@ -77,56 +86,12 @@
 
 .table th,
 .table td {
-  /* padding: 10px;
-  border-bottom: 1px solid #ddd; */
-  .user-list h4 {
-    margin-bottom: 10px;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .table th,
-  .table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .table th {
-    background-color: #f4f4f4;
-    text-align: left;
-  }
-  
-  .table tbody tr:hover {
-    background-color: #f9f9f9;
-  }
-  
-  /* .search-input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
-  }
-   */
-   .search-input {
-    width: calc(100% - 24px); /* Adjust the width to leave space for the left padding and border */
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
-    border-left: 4px solid aqua; /* Add left border with aqua blue color */
-    margin-left: -4px; /* Compensate for the left border */
-  }
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
 .table th {
   background-color: #f4f4f4;
-  /* text-align: left; */
 }
 
 .table tbody tr:hover {
@@ -134,11 +99,12 @@
 }
 
 .search-input {
-  width: 100%;
+  width: calc(100% - 24px);
   padding: 8px;
   margin-bottom: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-sizing: border-box;
+  border-left: 4px solid aqua;
+  margin-left: -4px;
 }
-

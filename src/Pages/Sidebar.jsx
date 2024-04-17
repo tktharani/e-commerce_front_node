@@ -151,6 +151,12 @@ const Sidebar = () => {
           </li>
         </ul>
       </div>
+       {/* Add Product Form */}
+       {showAddProductForm && (
+        <div className="add-product-form">
+          <AddProductForm handleAddProduct={handleAddProduct} />
+        </div>
+      )}
       {activeLink === 'users' && (
         <div className="user-list">
           <h4>All Users</h4>
@@ -243,11 +249,7 @@ const Sidebar = () => {
               fetchUsers();
             }}
           />
-          {activeLink === 'addproduct' && showAddProductForm && (
-  <div className="add-product-form">
-    <AddProductForm handleAddProduct={handleAddProduct} />
-  </div>
-)}
+          
 {/* Pagination */}
 <div className="d-flex justify-content-center">
         <nav aria-label="Page navigation">

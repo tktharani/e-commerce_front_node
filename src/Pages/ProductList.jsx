@@ -4,13 +4,13 @@ import axios from 'axios';
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('all'); // Default to show all products
+  const [selectedCategory, setSelectedCategory] = useState('all'); 
 
   useEffect(() => {
     axios.get('http://localhost:5000/product/list')
       .then(response => {
         setProducts(response.data);
-        setFilteredProducts(response.data); // Initialize filteredProducts with all products
+        setFilteredProducts(response.data); 
       })
       .catch(error => {
         console.error('Error fetching products:', error);
@@ -42,7 +42,7 @@ const ProductList = () => {
               <option value="grocery">Grocery</option>
               <option value="fruits">Fruits</option>
               <option value="vegetables">Vegetables</option>
-              {/* Add other category options as needed */}
+              
             </select>
           </div>
         </div>
