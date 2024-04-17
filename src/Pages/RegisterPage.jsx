@@ -15,12 +15,14 @@ const RegisterPage = () => {
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
-        console.log(name, value);
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(formData);
+        if (!formData.username || !formData.password || !formData.email || !formData.fullName) {
+            alert("Please fill in all fields");
+            return;
+        }
 
         // Send POST request to backend endpoint
         const response = await fetch("http://localhost:5000/user/insert", {
@@ -30,17 +32,17 @@ const RegisterPage = () => {
             method: 'POST',
             body: JSON.stringify(formData)
         });
+        const responseData = await response.json();
+        if (!response.ok) {
+            // Set errors state to display error messages to the user
+            setErrors(responseData);
 
-        // Check if the response status is successful (200 OK)
-        if (response.ok) {
-            // Parse the response JSON data
-            const responseData = await response.json();
+            // Check if the error includes a message about username or email already existing
+            if (responseData.some(error => error.msg.toLowerCase().includes('username') || error.msg.toLowerCase().includes('email'))) {
+                alert("Username or Email already exists");
+            }
+        } else {
             console.log("Data received", responseData);
-
-            // Show success message or redirect user
-            alert("Your are successfully Registered");
-            // Optionally, redirect user to login page or another page
-            // window.location.href = '/login';
 
             // Reset the form fields
             setFormData({
@@ -48,54 +50,70 @@ const RegisterPage = () => {
                 password: "",
                 email: "",
                 fullName: "",
-                
             });
+
+            // Show success message or redirect user
+            alert("You are successfully Registered");
             setErrors([]); // Clear any previous errors
-        } else {
-            // Handle validation errors or other backend errors
-            const errorData = await response.json();
-            console.error("Error registering user:", errorData);
-            // Set errors state to display error messages to the user
-            setErrors(errorData);
         }
     };
 
+        
+
     return (
-        <div>
-            <div className="container bg-secondary p-5">
-                <h2 className='text-uppercase text-danger mb-4'>Register form</h2>
-                <form onSubmit={handleSubmit} className="signup-form">
-                    <div className="form-group">
-                        <label htmlFor="username" className="text-white p-2">Username</label>
-                        <input type="text" name="username" id="username" className="form-control" value={formData.username} onChange={handleChange} />
-                        {errors && errors.map((error, index) => (
-                            error.param === 'username' && <p key={index} className="text-danger">{error.msg}</p>
-                        ))}
+        <div className="container py-5">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card">
+                        <div className="card-body">
+                            <h2 className="card-title text-center text-danger mb-4">Register</h2>
+                            <form onSubmit={handleSubmit}>
+                                <div className="form-group row">
+                                    <label htmlFor="username" className="col-sm-3 col-form-label">Username</label>
+                                    <div className="col-sm-9">
+                                        <input type="text" name="username" id="username" className="form-control" value={formData.username} onChange={handleChange} />
+                                        {errors && errors.map((error, index) => (
+                                            error.param === 'username' && <p key={index} className="text-danger">{error.msg}</p>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="form-group row">
+                                    <label htmlFor="fullName" className="col-sm-3 col-form-label">Full Name</label>
+                                    <div className="col-sm-9">
+                                        <input type="text" name="fullName" id="fullName" className="form-control" value={formData.fullName} onChange={handleChange} />
+                                        {errors && errors.map((error, index) => (
+                                            error.param === 'fullName' && <p key={index} className="text-danger">{error.msg}</p>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="form-group row">
+                                    <label htmlFor="password" className="col-sm-3 col-form-label">Password</label>
+                                    <div className="col-sm-9">
+                                        <input type="password" name="password" id="password" className="form-control" value={formData.password} onChange={handleChange} />
+                                        {errors && errors.map((error, index) => (
+                                            error.param === 'password' && <p key={index} className="text-danger">{error.msg}</p>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="form-group row">
+                                    <label htmlFor="email" className="col-sm-3 col-form-label">Email</label>
+                                    <div className="col-sm-9">
+                                        <input type="email" name="email" id="email" className="form-control" value={formData.email} onChange={handleChange} />
+                                        {errors && errors.map((error, index) => (
+                                            error.param === 'email' && <p key={index} className="text-danger">{error.msg}</p>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="form-group text-center">
+                                    <button type="submit" className="btn btn-success">Register</button>
+                                </div>
+                                <div className="text-center">
+                                    <Link to="/login">Back to Login</Link>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="password" className="text-white p-2">Password</label>
-                        <input type="password" name="password" id="password" className="form-control" value={formData.password} onChange={handleChange} />
-                        {errors && errors.map((error, index) => (
-                            error.param === 'password' && <p key={index} className="text-danger">{error.msg}</p>
-                        ))}
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="email" className="text-white p-2">Email</label>
-                        <input type="email" name="email" id="email" className="form-control" value={formData.email} onChange={handleChange} />
-                        {errors && errors.map((error, index) => (
-                            error.param === 'email' && <p key={index} className="text-danger">{error.msg}</p>
-                        ))}
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="fullName" className="text-white p-2">Full Name</label>
-                        <input type="text" name="fullName" id="fullName" className="form-control" value={formData.fullName} onChange={handleChange} />
-                        {errors && errors.map((error, index) => (
-                            error.param === 'fullName' && <p key={index} className="text-danger">{error.msg}</p>
-                        ))}
-                    </div>
-                    <button type="submit" className="btn btn-success mr-2">Register</button>
-                    <Link to="/login" className="text-white">Back to Login</Link>
-                </form>
+                </div>
             </div>
         </div>
     );

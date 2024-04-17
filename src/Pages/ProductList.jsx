@@ -5,6 +5,7 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all'); 
+  
 
   useEffect(() => {
     axios.get('http://localhost:5000/product/list')
@@ -30,7 +31,7 @@ const ProductList = () => {
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
-
+  
   return (
     <div className="container">
       <div className="row">
@@ -52,8 +53,9 @@ const ProductList = () => {
             {filteredProducts.map(product => (
               <div key={product._id} className="col-md-4 mb-3">
                 <div className="card">
-                  <img src={product.image} className="card-img-top" alt={product.name} style={{ width: '100%', height: '300px', objectFit: 'cover' }} />
-                  <div className="card-body">
+                <img src={`http://localhost:5000/public/data/uploads/${product.image}`} className="card-img-top" alt={product.name} style={{ width: '100%', height: '300px', objectFit: 'cover' }} />
+ 
+                 <div className="card-body">
                     <h5 className="card-title">{product.name}</h5>
                     <p className="card-text">Price: Rs.{product.price}</p>
                     <p className="card-text">Category: {product.category}</p>
