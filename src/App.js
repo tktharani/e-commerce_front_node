@@ -12,6 +12,9 @@ import UserEditModal from './Pages/UserEditModal';
 import AddProductForm from './Pages/AddProductForm';
 import LoginModal from './Pages/LoginModal';
 import RegisterPage from './Pages/RegisterPage';
+import ProductsPage from './Pages/ProductPages';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 
 
@@ -25,6 +28,7 @@ function App() {
        <Route path="/" element={<ProductList />}/>
        <Route path="/login" element={LoginModal} />
        <Route path="/register" element={<RegisterPage />}/>
+       <Route path="/admin/products" element={<ProductsPage />}/>
       
        <Route path="/add" Component={AddProductForm} />
  

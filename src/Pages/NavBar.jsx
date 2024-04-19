@@ -25,7 +25,7 @@ const NavBar = () => {
     return (
         <nav className="navbar">
             <div className="logo">
-                {/* <img src={logo} alt="Logo" /> */}
+                {/* <img src="" alt="Logo" /> */}
             </div>
             <div className="search-bar">
                 <FaSearch className="search-icon" />

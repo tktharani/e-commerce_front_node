@@ -53,7 +53,14 @@ const UserEditModal = ({ show, handleClose,userId, handleUpdate }) => {
 
 
   return (
-    <div className="modal" style={{ display: show ? 'block' : 'none', backgroundColor: 'rgba(0, 0, 0, 0.5)', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
+    <div className="modal" style={{ 
+      display: show ? 'block' : 'none', 
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+      position: 'fixed', 
+      top: '50%', 
+      left: '50%',  
+      transform: 'translate(-50%, -50%)',
+       zIndex: 1000 }}>
       <div className="modal-dialog" style={{ maxWidth: 500, margin: 'auto', marginTop: 200 }}>
         <div className="modal-content">
           <div className="modal-header" style={{ backgroundColor: '#007bff', color: '#fff', padding: '10px 20px', display: 'flex', justifyContent: 'space-between' }}>

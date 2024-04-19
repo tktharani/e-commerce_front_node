@@ -127,7 +127,7 @@ const Sidebar = () => {
           </li>
           <li>
             <Link
-              to="/admin"
+              to="/admin/products"
               className={`sidebar-link ${activeLink === 'products' ? 'active' : ''}`}
               onClick={() => handleSetActiveLink('products')}
             >

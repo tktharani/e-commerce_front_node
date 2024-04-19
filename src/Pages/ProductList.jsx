@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import { Button } from 'react-bootstrap';
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -59,6 +59,8 @@ const ProductList = () => {
                     <h5 className="card-title">{product.name}</h5>
                     <p className="card-text">Price: Rs.{product.price}</p>
                     <p className="card-text">Category: {product.category}</p>
+                    <Button variant="success" >Add to Cart</Button>
+    
                   </div>
                 </div>
               </div>

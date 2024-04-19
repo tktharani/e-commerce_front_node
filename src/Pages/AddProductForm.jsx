@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiHome, FiUsers, FiShoppingCart, FiPlusCircle } from 'react-icons/fi';
 import './Sidebar.css';
+import ProductsPage from './ProductPages';
 
 const Sidebar = ({ activeLink, handleSetActiveLink, setShowAddProductForm }) => {
   return (
@@ -33,7 +34,7 @@ const Sidebar = ({ activeLink, handleSetActiveLink, setShowAddProductForm }) => 
           </li>
           <li>
             <Link
-              to="/admin"
+              to="/admin/products"
               className={`sidebar-link ${activeLink === 'products' ? 'active' : ''}`}
               onClick={() => handleSetActiveLink('products')}
             >
@@ -108,7 +109,7 @@ const AddProductForm = ({ handleAddProduct }) => {
       setImage('');
       alert('Product added successfully');
     } else {
-      const text = await response.text(); // Get the response as text
+      const text = await response.text(); 
       setError(text || 'Error adding product.');
     }
   } catch (error) {
@@ -190,14 +191,12 @@ const AddProductForm = ({ handleAddProduct }) => {
                 className="form-control"
                 id="image"
                 name="uploaded_file"
-                onChange={(e) => setImage(e.target.files[0])} // Handle file change and update state
-                accept="image/*" // Accept only image files
+                onChange={(e) => setImage(e.target.files[0])} 
+                accept="image/*" 
                 style={{ width: '100%' }}
               />
             </div>
             <button type="submit" className="btn btn-primary">Add Product</button>
-   
-            {/* Submit button */}
           </form>
         </div>
       </div>
@@ -211,22 +210,26 @@ const AdminPage = () => {
 
   const handleSetActiveLink = (link) => {
     setActiveLink(link);
-    setShowAddProductForm(false); // Hide Add Product form when navigating to other pages
+    if (link === 'addproduct') {
+      setShowAddProductForm(true);
+    } else {
+      setShowAddProductForm(false);
+    }
   };
+
 
   return (
     <div className="admin-page">
       <Sidebar activeLink={activeLink} handleSetActiveLink={handleSetActiveLink} setShowAddProductForm={setShowAddProductForm} />
       <div className="content">
-        {showAddProductForm ? (
-          <AddProductForm />
-        ) : (
-          /* Render other content based on the active link */
-           <p>Content for {activeLink}</p>
-        )}
+        {activeLink === 'dashboard' && <p>Dashboard Content</p>}
+        {activeLink === 'users' && <p>User Table</p>}
+        {activeLink === 'products' && <ProductsPage />}
+        {showAddProductForm && <AddProductForm />}
       </div>
     </div>
   );
 };
+
 
 export default AdminPage;
