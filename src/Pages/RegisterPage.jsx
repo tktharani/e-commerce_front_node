@@ -23,7 +23,7 @@ const RegisterPage = () => {
             alert("Please fill in all fields");
             return;
         }
-
+        try{
         // Send POST request to backend endpoint
         const response = await fetch("http://localhost:5000/user/insert", {
             headers: {
@@ -38,8 +38,8 @@ const RegisterPage = () => {
             setErrors(responseData);
 
             // Check if the error includes a message about username or email already existing
-            if (responseData.some(error => error.msg.toLowerCase().includes('username') || error.msg.toLowerCase().includes('email'))) {
-                alert("Username or Email already exists");
+            if (responseData.errors) {
+                alert(responseData.errors[0].msg); // Display the first error message
             }
         } else {
             console.log("Data received", responseData);
@@ -55,6 +55,10 @@ const RegisterPage = () => {
             // Show success message or redirect user
             alert("You are successfully Registered");
             setErrors([]); // Clear any previous errors
+        }
+    }catch (error) {
+            console.error('Error during registration:', error);
+            alert("Registration failed. Please try again later.");
         }
     };
 

@@ -75,12 +75,12 @@ const Sidebar = () => {
 
   const handleEdit = async (userId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/user/${userId}`);
+      const response = await axios.get(`http://localhost:5000/users/${userId}`);
       setInitialUserData(response.data);
       setEditUserId(userId);
       setShowEditModal(true);
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error('Error fetching user data:', error.response);
     }
   };
 

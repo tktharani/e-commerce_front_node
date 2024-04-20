@@ -14,6 +14,9 @@ const ProductsPage = () => {
   const [viewProductId, setViewProductId] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editProductId, setEditProductId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+const [filteredProducts, setFilteredProducts] = useState([]);
+
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -35,6 +38,15 @@ const ProductsPage = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+    console.log('Filtered Products:', filtered); // Check if filtering works
+  }, [searchTerm, products]);
+
 
   const handleDelete = async (productId) => {
     try {
@@ -77,9 +89,25 @@ const ProductsPage = () => {
     setShowEditModal(false);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+     // Ensure this line is correctly updating the searchTerm state
+     console.log('Search Term:', event.target.value); 
+    };
+
+  
+
   return (
     <div className="products-page">
       <h1>All Products</h1>
+      <input
+        type="text"
+        className="form-control m-2" // Bootstrap class for form control
+        placeholder="Search by name..."
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
+
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -92,7 +120,7 @@ const ProductsPage = () => {
           </tr>
         </thead>
         <tbody>
-          {currentProducts.map((product) => (
+          {filteredProducts.map((product) => (
             <tr key={product._id}>
               <td>{product.name}</td>
               <td>{product.description}</td>
