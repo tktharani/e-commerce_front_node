@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const LoginModal = ({ isOpen, onClose }) => {
+const LoginModal = ({ isOpen, onClose,onLogin }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -15,9 +15,8 @@ const LoginModal = ({ isOpen, onClose }) => {
             // Save the token to localStorage or sessionStorage
             localStorage.setItem('token', token); // Example using localStorage
             alert('You are successfully logged in!');
-            onClose(); // Close the modal after successful login
-            // Redirect to home page or perform any other actions
-            // window.location.href = '/home'; // Example redirect to home page
+            onClose(); 
+            onLogin();
         } catch (error) {
             console.error('Login error:', error);
             alert('Login failed. Please check your credentials.');

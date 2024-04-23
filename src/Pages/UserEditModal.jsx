@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const UserEditModal = ({ show, handleClose,userId, handleUpdate }) => {
+const UserEditModal = ({ show, handleClose, userId, handleUpdate }) => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -11,10 +11,9 @@ const UserEditModal = ({ show, handleClose,userId, handleUpdate }) => {
   });
 
   useEffect(() => {
-    
     const fetchUserData = async () => {
       try {
-        const response = await axios.put(`http://localhost:5000/user/${userId}`);
+        const response = await axios.get(`http://localhost:5000/user/${userId}`);
         const userData = response.data; 
         setFormData(userData); 
       } catch (error) {
@@ -26,10 +25,6 @@ const UserEditModal = ({ show, handleClose,userId, handleUpdate }) => {
       fetchUserData();
     }
   }, [show, userId]);
-
-  useEffect(() => {
-    }, []);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,8 +45,6 @@ const UserEditModal = ({ show, handleClose,userId, handleUpdate }) => {
     }
   };
   
-
-
   return (
     <div className="modal" style={{ 
       display: show ? 'block' : 'none', 
@@ -60,7 +53,8 @@ const UserEditModal = ({ show, handleClose,userId, handleUpdate }) => {
       top: '50%', 
       left: '50%',  
       transform: 'translate(-50%, -50%)',
-       zIndex: 1000 }}>
+      zIndex: 1000 }}>
+      {/* Modal content */}
       <div className="modal-dialog" style={{ maxWidth: 500, margin: 'auto', marginTop: 200 }}>
         <div className="modal-content">
           <div className="modal-header" style={{ backgroundColor: '#007bff', color: '#fff', padding: '10px 20px', display: 'flex', justifyContent: 'space-between' }}>
@@ -96,6 +90,7 @@ const UserEditModal = ({ show, handleClose,userId, handleUpdate }) => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { FaShoppingCart, FaSearch } from 'react-icons/fa';
+import {  FaSearch } from 'react-icons/fa';
 import SearchBar from './SearchBar';
 import './NavBar.css';
 import LoginModal from './LoginModal';
@@ -25,7 +25,7 @@ const NavBar = () => {
     return (
         <nav className="navbar">
             <div className="logo">
-                {/* <img src="" alt="Logo" /> */}
+                <img src="/images/icon-5.jpg" alt="Logo" />
             </div>
             <div className="search-bar">
                 <FaSearch className="search-icon" />
@@ -33,7 +33,7 @@ const NavBar = () => {
             </div>
             <div className="nav-links">
                 <button onClick={handleLogin}>Login</button>
-                <FaShoppingCart className="cart-icon" />
+                
             </div>
             {isModalOpen && (
     <div className="modal-overlay">

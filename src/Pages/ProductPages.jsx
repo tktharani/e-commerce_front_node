@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Modal, Button, Table,Pagination } from 'react-bootstrap';
+import { Modal, Button, Table, Pagination } from 'react-bootstrap';
 import ProductViewModal from './ProductViewModal';
 import ProductEditModal from './ProductEditModal';
 
@@ -15,16 +15,14 @@ const ProductsPage = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editProductId, setEditProductId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-const [filteredProducts, setFilteredProducts] = useState([]);
-
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
+  const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
 
   const fetchProducts = async () => {
     try {
@@ -44,9 +42,8 @@ const [filteredProducts, setFilteredProducts] = useState([]);
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProducts(filtered);
-    console.log('Filtered Products:', filtered); // Check if filtering works
+    setCurrentPage(1); // Reset page when search term changes
   }, [searchTerm, products]);
-
 
   const handleDelete = async (productId) => {
     try {
@@ -91,18 +88,13 @@ const [filteredProducts, setFilteredProducts] = useState([]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-     // Ensure this line is correctly updating the searchTerm state
-     console.log('Search Term:', event.target.value); 
-    };
-
-  
+  };
 
   return (
     <div className="products-page">
-      <h1>All Products</h1>
       <input
         type="text"
-        className="form-control m-2" // Bootstrap class for form control
+        className="form-control m-2" 
         placeholder="Search by name..."
         value={searchTerm}
         onChange={handleSearchChange}
@@ -120,7 +112,7 @@ const [filteredProducts, setFilteredProducts] = useState([]);
           </tr>
         </thead>
         <tbody>
-          {filteredProducts.map((product) => (
+          {currentProducts.map((product) => (
             <tr key={product._id}>
               <td>{product.name}</td>
               <td>{product.description}</td>
@@ -131,7 +123,7 @@ const [filteredProducts, setFilteredProducts] = useState([]);
               <td>{product.category}</td>
               <td>
                 <Button variant="primary" className="mr-2" onClick={() => openViewModal(product._id)}>View</Button>
-                <Button variant="warning" className="mr-2" onClick={() => openEditModal(product._id)} >Edit</Button>
+                <Button variant="warning" className="mr-2" onClick={() => openEditModal(product._id)}>Edit</Button>
                 <Button variant="danger" onClick={() => openDeleteModal(product)}>Delete</Button>
               </td>
             </tr>
@@ -140,9 +132,9 @@ const [filteredProducts, setFilteredProducts] = useState([]);
       </Table>
 
       {/* Bootstrap Pagination */}
-      <div className="d-flex justify-content-center">
+      <div className='d-flex justify-content-center'>
       <Pagination>
-        {Array(Math.ceil(products.length / itemsPerPage))
+        {Array(Math.ceil(filteredProducts.length / itemsPerPage))
           .fill()
           .map((_, index) => (
             <Pagination.Item

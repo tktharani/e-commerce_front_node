@@ -3,18 +3,18 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #f0f0f0;
+    background-color: #b1e2ab;
 }
 
 .logo img {
-    height: 70px;
-    width: 70px;
+    height: 50px;
+    width: 50px;
 }
 
 .search-bar {
     display: flex;
     align-items: center;
-    background-color: #fff;
+    background-color: #a2e8b8;
     border-radius: 5px;
     padding: 5px;
 }
