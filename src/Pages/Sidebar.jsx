@@ -75,7 +75,7 @@ const Sidebar = () => {
 
   const handleEdit = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/users/${userId}`);
+      const response = await axios.get(`http://localhost:5000/user/${userId}`);
       setInitialUserData(response.data);
       setEditUserId(userId);
       setShowEditModal(true);
@@ -175,6 +175,7 @@ const Sidebar = () => {
                 <th>Email</th>
                 <th>Full Name</th>
                 <th>Role</th>
+                <th>Address</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -185,6 +186,18 @@ const Sidebar = () => {
                   <td>{user.email}</td>
                   <td>{user.fullName}</td>
                   <td>{user.role}</td>
+                  <td>
+                      {user.address ? (
+                        <div>
+                          {user.address.street}<br />
+                          {user.address.city}<br />
+                          {user.address.state}, {user.address.postalCode}<br />
+                          {user.address.country}
+                        </div>
+                      ) : (
+                        'Address Not Available'
+                      )}
+                    </td>
                   <td>
                     <button onClick={() => handleView(user._id)} className="btn btn-primary btn-sm">
                       View

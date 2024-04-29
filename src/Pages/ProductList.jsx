@@ -164,7 +164,7 @@ const ProductList = () => {
       <div className="row ">
         <div className="col-md-3">
           {/* Category Dropdown */}
-        
+          <h2>Categories</h2>
          <select className="form-select mt-3" value={selectedCategory} onChange={handleCategoryChange}>
             <option value="all">All Categories</option>
             <option value="grocery">Grocery</option>

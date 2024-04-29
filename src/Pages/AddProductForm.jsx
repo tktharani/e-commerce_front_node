@@ -89,7 +89,7 @@ const AddProductForm = ({ handleAddProduct }) => {
       formData.append('description', description);
       formData.append('price', price);
       formData.append('category', category);
-      formData.append('uploaded_file', image); // Append the image file to FormData
+      formData.append('uploaded_file', image); 
 
       const response = await fetch('http://localhost:5000/product/upload', {
       method: 'POST',
@@ -99,7 +99,7 @@ const AddProductForm = ({ handleAddProduct }) => {
     if (response.ok) {
       setError('');
       if (typeof handleAddProduct === 'function') {
-        handleAddProduct(); // Call the parent function to update the product list
+        handleAddProduct(); 
       }
       // Clear the form fields
       setProductName('');
@@ -207,15 +207,24 @@ const AddProductForm = ({ handleAddProduct }) => {
 const AdminPage = () => {
   const [activeLink, setActiveLink] = useState('dashboard');
   const [showAddProductForm, setShowAddProductForm] = useState(false);
+  const [showProductsPage, setShowProductsPage] = useState(false); // New state for showing ProductsPage
 
   const handleSetActiveLink = (link) => {
     setActiveLink(link);
     if (link === 'addproduct') {
       setShowAddProductForm(true);
+      setShowProductsPage(false); // Hide ProductsPage when navigating to add product
+    } else if (link === 'products') {
+      setShowProductsPage(true); // Show ProductsPage when navigating to products
+      setShowAddProductForm(false);
     } else {
       setShowAddProductForm(false);
+      setShowProductsPage(false);
     }
   };
+
+  
+  
 
 
   return (
@@ -224,7 +233,7 @@ const AdminPage = () => {
       <div className="content">
         {activeLink === 'dashboard' && <p>Dashboard Content</p>}
         {activeLink === 'users' && <p>User Table</p>}
-        {activeLink === 'products' && <ProductsPage />}
+        {showProductsPage && <ProductsPage />}
         {showAddProductForm && <AddProductForm />}
       </div>
     </div>

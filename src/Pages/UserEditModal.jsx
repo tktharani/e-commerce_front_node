@@ -7,7 +7,13 @@ const UserEditModal = ({ show, handleClose, userId, handleUpdate }) => {
     email: '',
     password: '',
     fullName: '',
-    role: ''
+    role: '',
+    // Add address fields
+    street: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    country: ''
   });
 
   useEffect(() => {
@@ -82,6 +88,27 @@ const UserEditModal = ({ show, handleClose, userId, handleUpdate }) => {
               <div className="mb-3">
                 <label htmlFor="role" className="form-label">Role:</label>
                 <input type="text" className="form-control" id="role" name="role" value={formData.role} onChange={handleChange} />
+              </div>
+              {/* Address fields */}
+              <div className="mb-3">
+                <label htmlFor="street" className="form-label">Street:</label>
+                <input type="text" className="form-control" id="street" name="street" value={formData.street} onChange={handleChange} />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="city" className="form-label">City:</label>
+                <input type="text" className="form-control" id="city" name="city" value={formData.city} onChange={handleChange} />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="state" className="form-label">State:</label>
+                <input type="text" className="form-control" id="state" name="state" value={formData.state} onChange={handleChange} />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="postalCode" className="form-label">Postal Code:</label>
+                <input type="text" className="form-control" id="postalCode" name="postalCode" value={formData.postalCode} onChange={handleChange} />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="country" className="form-label">Country:</label>
+                <input type="text" className="form-control" id="country" name="country" value={formData.country} onChange={handleChange} />
               </div>
               <div className="text-center">
                 <button type="submit" className="btn btn-primary">Save Changes</button>

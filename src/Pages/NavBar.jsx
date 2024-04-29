@@ -17,9 +17,15 @@ const NavBar = () => {
         // console.log("isModalOpen:", isModalOpen); 
     };
 
-    const handleCloseModal = () => {
+    
+    const handleSuccessfulLogin = () => {
+        // Logic to handle successful login, e.g., update user information
         setIsModalOpen(false);
+         // Close the modal after successful login
+         console.log('isModalOpen:', isModalOpen); 
     };
+
+
     
 
     return (
@@ -36,10 +42,10 @@ const NavBar = () => {
                 
             </div>
             {isModalOpen && (
-    <div className="modal-overlay">
-        <LoginModal isOpen={isModalOpen} onClose={handleCloseModal} handleLogin={handleLogin} />
-    </div>
-)}
+                <div className="modal-overlay">
+                    <LoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onLogin={handleSuccessfulLogin} />
+                </div>
+            )}
               
         </nav>
     );
