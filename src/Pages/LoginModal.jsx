@@ -42,13 +42,16 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
                 username,
                 password
             });
-            const { token, username: loggedInUsername } = response.data;
+            const { token, username: loggedInUsername,userId } = response.data;
             console.log('Logged in user:', loggedInUsername);
             localStorage.setItem('token', token);
+            localStorage.setItem('userId', userId); // Set the user ID in localStorage
+
             setLoggedInUser(loggedInUsername);
             alert('You are successfully logged in!');
             onLogin();
             onClose();
+            
             
         } catch (error) {
             console.error('Login error:', error);

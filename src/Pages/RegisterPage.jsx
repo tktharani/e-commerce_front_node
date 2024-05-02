@@ -160,7 +160,7 @@ const RegisterPage = () => {
                                 <input type="text" name="country" id="country" className="form-control" value={formData.country} onChange={handleChange} />
                             </div>
                         </div>
-                        {/* End Address Fields */}
+                        {/* End Address Fields */}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
                         <div className="form-group text-center">
                             <button type="submit" className="btn btn-success">Register</button>
                         </div>

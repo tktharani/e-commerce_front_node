@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Modal,Carousel } from 'react-bootstrap';
+import { Button,Modal,Carousel } from 'react-bootstrap';
 import { FaShoppingCart } from 'react-icons/fa'; 
 import LoginModal from './LoginModal';
-import PaymentPage from './PaymentPage';
-import PaymentSuccessModal from './PaymentSuccessModal ';
+
+const API_URL = 'http://localhost:5000'; 
 
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [cart, setCart] = useState([]);
   const [showCartModal, setShowCartModal] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showPaymentPage, setShowPaymentPage] = useState(false);
-  const [showPaymentSuccessModal, setShowPaymentSuccessModal] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [username, setUsername] = useState('');
 
-
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/product/list`);
+      setProducts(response.data);
+      setFilteredProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
   useEffect(() => {
-    axios.get('http://localhost:5000/product/list')
-      .then(response => {
-        setProducts(response.data);
-        setFilteredProducts(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching products:', error);
-      });
+    fetchProducts(); // Fetch products when component mounts
   }, []);
 
   useEffect(() => {
@@ -45,72 +46,108 @@ const ProductList = () => {
     setSelectedCategory(e.target.value);
   };
 
-  const handleAddToCart = (product) => {
+  useEffect(() => {
+    // Retrieve userId from localStorage
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+        setUserId(storedUserId);
+    }
+}, []);
+
+  // Update handleAddToCart function in ProductList.js
+  const handleAddToCart = async (product) => {
     if (isLoggedIn) {
-      const existingItem = cart.find(item => item._id === product._id);
-      if (existingItem) {
-        const updatedCart = cart.map(item =>
-          item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-        setCart(updatedCart);
-      } else {
-        setCart([...cart, { ...product, quantity: 1 }]);
+      try {
+        const userId = localStorage.getItem('userId'); // Get userId from storage
+        // console.log('LoggedInUser:', loggedInUser); // Log the loggedInUser to ensure it's set correctly
+        console.log('User ID from localStorage:', userId); // Log the user ID from localStorage
+  
+        if (!userId) {
+          console.error('User ID not found in localStorage');
+          // Optionally, handle this case by showing an error message to the user or redirecting to login
+          return;
+        }
+  
+        const response = await axios.post(`${API_URL}/add-to-cart`, {
+          userId: userId,
+          productId: product._id,
+          quantity: 1, // You can change the quantity logic as needed
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Send JWT token
+          },
+        });
+  
+        console.log(response.data); // Log success message or handle accordingly
+         // Show alert when product is added to the cart
+         alert(`Product added to the cart successfully!`);
+
+      } catch (error) {
+        console.error('Error adding product to cart:', error);
       }
-      setCartItemsCount(cartItemsCount + 1); // Increment cart items count
     } else {
-      setShowLoginModal(true);
+      setShowLoginModal(true); // Show login modal if not logged in
     }
   };
-
-
-  const handleRemoveFromCart = (productId) => {
-    const updatedCart = cart.filter(item => item._id !== productId);
-    setCart(updatedCart);
-    setCartItemsCount(cartItemsCount - 1); // Decrement cart items count
-  };
-
-  const handleIncreaseQuantity = (productId) => {
-    const updatedCart = cart.map(item =>
-      item._id === productId ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    setCart(updatedCart);
-  };
-
-  const handleDecreaseQuantity = (productId) => {
-    const updatedCart = cart.map(item =>
-      item._id === productId && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-    );
-    setCart(updatedCart);
-  };
-
   const handleCloseCartModal = () => {
     setShowCartModal(false);
   };
 
-  const handleCloseLoginModal = () => {
-    setShowLoginModal(false);
-  };
-
-  const getTotalPrice = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-  };
-
-  const handleProceedToBuy = () => {
+  const handleShowCartModal = async () => {
     if (isLoggedIn) {
-      setShowPaymentPage(true);
-      setShowCartModal(false); // Close the cart modal when proceeding to buy
+      try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          console.error('User ID not found in localStorage');
+          return;
+        }
+  
+        // Fetch user details including username
+        const userResponse = await axios.get(`${API_URL}/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+  
+        const userData = userResponse.data;
+        if (!userData) {
+          console.error('User data not found');
+          return;
+        }
+  
+        // Update username state
+        setUsername(userData.username);
+  
+        // Fetch cart details
+        const cartResponse = await axios.get(`${API_URL}/cart-details/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        
+        setCartItems(cartResponse.data.products);
+        setShowCartModal(true);
+      } catch (error) {
+        console.error('Error fetching cart details:', error);
+      }
     } else {
       setShowLoginModal(true);
     }
   };
 
- 
+  const handleProceedToBuy = () => {
+    // Add your logic here for proceeding to buy
+    console.log('Proceeding to buy...'); // Placeholder action
+    // You can navigate to the checkout page or perform other actions
+  };
   
 
-  const handlePaymentSuccess = () => {
-    setShowPaymentSuccessModal(true);
-  };
+ 
 
+  const handleCloseLoginModal = () => {
+    setShowLoginModal(false);
+  };
+  
   return (
     <div className="container m-5">
       {/* Custom styles for reducing Carousel height */}
@@ -184,19 +221,21 @@ const ProductList = () => {
                   borderRadius: '70%',
                   cursor: 'pointer',
                 }}
-                onClick={() => setShowCartModal(true)}
+                onClick= {handleShowCartModal}
               >
-                <FaShoppingCart size={24} />
-                {cartItemsCount > 0 && (
-                  <span
-                    className="cart-count position-absolute end-0   top-100 translate-middle badge rounded-pill bg-success"
-                    style={{ fontSize: '14px' }}
-                  >
-                    {cartItemsCount}
-                  </span>
-                )}
-              </div>
-          </div>
+              <FaShoppingCart size={24} />
+          {/* Show cart item count badge */}
+          {cartItems.length > 0 && (
+            <span
+              className="cart-count position-absolute end-0 top-100 translate-middle badge rounded-pill bg-success"
+              style={{ fontSize: '14px' }}
+            >
+              {cartItems.length}
+            </span>
+          )}
+        </div>
+      </div>
+                
 
         </div>
         <div className="col-md-9">
@@ -220,52 +259,50 @@ const ProductList = () => {
         </div>
       </div>
       {/* Cart Modal */}
-      <Modal show={showCartModal} onHide={() => setShowCartModal(false)} centered>
-     
+      <Modal show={showCartModal} onHide={handleCloseCartModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Cart</Modal.Title>
+          <Modal.Title>Your Cart</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ul className="list-group">
-            {cart.map(item => (
-              <li key={item._id} className="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                <img src={`http://localhost:5000/public/data/uploads/${item.image}`} alt={item.name} style={{ width: '50px', height: '50px', marginRight: '10px' }} />
-                      
-                  {item.name} - Rs.{item.price} - Quantity: {item.quantity}
-                </div>
-                <div>
-                  <Button variant="info" size="sm"  className="m-2" onClick={() => handleIncreaseQuantity(item._id)}>+</Button>
-                  <Button variant="info" size="sm" className="m-2" onClick={() => handleDecreaseQuantity(item._id)}>-</Button>
-                  <Button variant="danger" size="sm" onClick={() => handleRemoveFromCart(item._id)}>Remove</Button>
-                  
-    
-                </div>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-3">Total Price: Rs.{getTotalPrice()}</div>
-          <Button variant="success" onClick={handleProceedToBuy}>Proceed to Buy</Button>
-       
-        </Modal.Body>
+  {cartItems.length > 0 ? (
+    <div>
+      <p>User ID: {userId}</p>
+      <p>Username: {username}</p> {/* Display username */}
+      <ul className="list-group">
+        {cartItems.map((item) => (
+          <li key={item._id} className="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              {/* Access product details */}
+              Product_Name: {item.product.name} <br />
+              Product_Price: Rs.{item.product.price} <br />
+              Quantity: {item.quantity} <br />
+              Total Price: Rs.{item.product.price * item.quantity} {/* Calculate total price */}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ) : (
+    <p>Your cart is empty.</p>
+  )}
+</Modal.Body>
+
         <Modal.Footer>
-        <Button variant="secondary" onClick={() => setShowCartModal(false)}>Close</Button>
-      
+          <Button variant="secondary" onClick={handleCloseCartModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleProceedToBuy}>
+                Proceed to Buy
+           </Button>
         </Modal.Footer>
       </Modal>
 
-      {/* PaymentPage Modal */}
-      <PaymentPage
-        isOpen={showPaymentPage}
-        onClose={() => setShowPaymentPage(false)}
-        totalPrice={getTotalPrice()}
-        handlePaymentSuccess={handlePaymentSuccess}
-      />
 
-<PaymentSuccessModal
-  show={showPaymentSuccessModal}
-  handleClose={() => setShowPaymentSuccessModal(false)}
-/>
+      
+
+      
+
+
       {/* Login Modal */}
       <LoginModal isOpen={showLoginModal} 
       onClose={() => setShowLoginModal(false)} 
