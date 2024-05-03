@@ -141,25 +141,29 @@ const ProductList = () => {
 
 
   // Function to update cart item quantity
-  const updateCartQuantity = async (productId, quantity) => {
-    try {
-      const response = await axios.put(
-        `${API_URL}/update-cart-quantity/${userId}/${productId}`,
-        { quantity },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Send JWT token
-          },
-        }
-      );
+  // Function to update cart item quantity
+const updateCartQuantity = async (productId, quantity) => {
+  try {
+    const response = await axios.put(
+      `${API_URL}/update-cart-quantity/${userId}/${productId}`,
+      { quantity },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Send JWT token
+        },
+      }
+    );
 
-      console.log(response.data); // Log success message or handle accordingly
-      // Refresh cart details after updating quantity
-      handleShowCartModal();
-    } catch (error) {
-      console.error('Error updating cart item quantity:', error);
-    }
-  };
+    console.log(response.data); // Log success message or handle accordingly
+    // Update total cart price based on the response from the backend
+    setCartTotalPrice(response.data.cart.totalPrice);
+    // Refresh cart details after updating quantity
+    handleShowCartModal();
+  } catch (error) {
+    console.error('Error updating cart item quantity:', error);
+  }
+};
+
 
   // Function to increase quantity
   const increaseQuantity = (productId) => {
@@ -172,7 +176,7 @@ const ProductList = () => {
     });
     setCartItems(updatedItems); // Update state
   };
-
+  
   // Function to decrease quantity
   const decreaseQuantity = (productId) => {
     const updatedItems = cartItems.map(item => {
@@ -184,36 +188,41 @@ const ProductList = () => {
     });
     setCartItems(updatedItems); // Update state
   };
-
   // Update handleRemoveFromCart function in ProductList.js
-// Update handleRemoveFromCart function in ProductList.js
-const handleRemoveFromCart = async (productId) => {
-  try {
-    const userId = localStorage.getItem('userId'); // Get userId from storage
-    const token = localStorage.getItem('token'); // Get JWT token from storage
-
-    if (!userId) {
-      console.error('User ID not found in localStorage');
-      // Optionally, handle this case by showing an error message to the user or redirecting to login
-      return;
+  const handleRemoveFromCart = async (productId) => {
+    try {
+      const userId = localStorage.getItem('userId'); // Get userId from storage
+      const token = localStorage.getItem('token'); // Get JWT token from storage
+  
+      if (!userId) {
+        console.error('User ID not found in localStorage');
+        // Optionally, handle this case by showing an error message to the user or redirecting to login
+        return;
+      }
+  
+      const response = await axios.delete(`${API_URL}/remove-from-cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Send JWT token in headers
+        },
+        data: { userId, productId }, // Send userId and productId in the request body
+      });
+  
+      console.log(response.data); // Log success message or handle accordingly
+  
+      // Update cartItems state in the frontend to reflect the removal
+      const updatedCartItems = cartItems.filter(item => item.product._id !== productId);
+      setCartItems(updatedCartItems);
+  
+      // Calculate total cart price based on updated cart items
+      const updatedCartTotalPrice = updatedCartItems.reduce((total, item) => {
+        return total + item.product.price * item.quantity;
+      }, 0);
+      setCartTotalPrice(updatedCartTotalPrice); // Update total cart price in the state
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
     }
-
-    const response = await axios.delete(`${API_URL}/remove-from-cart`, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Send JWT token in headers
-      },
-      data: { userId, productId }, // Send userId and productId in the request body
-    });
-
-    console.log(response.data); // Log success message or handle accordingly
-    // Refresh cart details or update UI after removing item from cart
-    //Update cartItems state in the frontend to reflect the removal
-    const updatedCartItems = cartItems.filter(item => item.product._id !== productId);
-    setCartItems(updatedCartItems);
-  } catch (error) {
-    console.error('Error removing item from cart:', error);
-  }
-};
+  };
+  
 
 
 
