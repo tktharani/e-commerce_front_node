@@ -223,7 +223,35 @@ const updateCartQuantity = async (productId, quantity) => {
     }
   };
   
-
+// clear the cart
+  const clearCart = async () => {
+    try {
+      const userId = localStorage.getItem('userId'); // Get userId from storage
+      const token = localStorage.getItem('token'); // Get JWT token from storage
+  
+      if (!userId) {
+        console.error('User ID not found in localStorage');
+        
+        return;
+      }
+  
+      const response = await axios.delete(`${API_URL}/clear-cart/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Send JWT token in headers
+        },
+      });
+  
+      console.log(response.data); // Log success message or handle accordingly
+  
+      // Update UI or state after clearing cart
+      setCartItems([]); // Update cart items to an empty array
+      setCartTotalPrice(0); // Update total cart price to 0
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+      
+    }
+  };
+  
 
 
   const handleProceedToBuy = () => {
@@ -394,6 +422,7 @@ const updateCartQuantity = async (productId, quantity) => {
                 <Button variant="secondary" onClick={handleCloseCartModal}>
             Close
           </Button>
+          <Button variant="danger" onClick={clearCart}>Clear Cart</Button>
           <Button variant="primary" onClick={handleProceedToBuy}>
                 Proceed to Buy
            </Button>
