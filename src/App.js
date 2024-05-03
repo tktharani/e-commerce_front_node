@@ -12,8 +12,7 @@ import UserEditModal from './Pages/UserEditModal';
 import AddProductForm from './Pages/AddProductForm';
 import LoginModal from './Pages/LoginModal';
 import RegisterPage from './Pages/RegisterPage';
-import ProductPages from './Pages/ProductPages'; // Corrected import for ProductsPage
-import AllProduct from './Pages/AllProduct';
+import ProductPages from './Pages/ProductPages'; 
 
 function App() {
   return (
@@ -21,7 +20,7 @@ function App() {
       <NavBar />
       <BrowserRouter>
         <Routes>
-        <Route path="/product" element={<AllProduct />} />
+        
           <Route path="/" element={<ProductList />} />
           <Route path="/login" element={<LoginModal />} />
           <Route path="/register" element={<RegisterPage />} />

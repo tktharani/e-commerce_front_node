@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button,Modal,Carousel } from 'react-bootstrap';
 import { FaShoppingCart } from 'react-icons/fa'; 
+import { FaMinus, FaPlus } from 'react-icons/fa';
 import LoginModal from './LoginModal';
 
 const API_URL = 'http://localhost:5000'; 
@@ -18,6 +19,7 @@ const ProductList = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
+  const [cartTotalPrice, setCartTotalPrice] = useState(0);
 
   const fetchProducts = async () => {
     try {
@@ -125,7 +127,9 @@ const ProductList = () => {
           },
         });
         
-        setCartItems(cartResponse.data.products);
+         setCartItems(cartResponse.data.products);
+         setCartTotalPrice(cartResponse.data.totalPrice); 
+        
         setShowCartModal(true);
       } catch (error) {
         console.error('Error fetching cart details:', error);
@@ -134,6 +138,84 @@ const ProductList = () => {
       setShowLoginModal(true);
     }
   };
+
+
+  // Function to update cart item quantity
+  const updateCartQuantity = async (productId, quantity) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/update-cart-quantity/${userId}/${productId}`,
+        { quantity },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Send JWT token
+          },
+        }
+      );
+
+      console.log(response.data); // Log success message or handle accordingly
+      // Refresh cart details after updating quantity
+      handleShowCartModal();
+    } catch (error) {
+      console.error('Error updating cart item quantity:', error);
+    }
+  };
+
+  // Function to increase quantity
+  const increaseQuantity = (productId) => {
+    const updatedItems = cartItems.map(item => {
+      if (item.product._id === productId) {
+        item.quantity += 1; // Increase quantity
+        updateCartQuantity(productId, item.quantity); // Update quantity in the backend
+      }
+      return item;
+    });
+    setCartItems(updatedItems); // Update state
+  };
+
+  // Function to decrease quantity
+  const decreaseQuantity = (productId) => {
+    const updatedItems = cartItems.map(item => {
+      if (item.product._id === productId && item.quantity > 1) {
+        item.quantity -= 1; // Decrease quantity
+        updateCartQuantity(productId, item.quantity); // Update quantity in the backend
+      }
+      return item;
+    });
+    setCartItems(updatedItems); // Update state
+  };
+
+  // Update handleRemoveFromCart function in ProductList.js
+// Update handleRemoveFromCart function in ProductList.js
+const handleRemoveFromCart = async (productId) => {
+  try {
+    const userId = localStorage.getItem('userId'); // Get userId from storage
+    const token = localStorage.getItem('token'); // Get JWT token from storage
+
+    if (!userId) {
+      console.error('User ID not found in localStorage');
+      // Optionally, handle this case by showing an error message to the user or redirecting to login
+      return;
+    }
+
+    const response = await axios.delete(`${API_URL}/remove-from-cart`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Send JWT token in headers
+      },
+      data: { userId, productId }, // Send userId and productId in the request body
+    });
+
+    console.log(response.data); // Log success message or handle accordingly
+    // Refresh cart details or update UI after removing item from cart
+    //Update cartItems state in the frontend to reflect the removal
+    const updatedCartItems = cartItems.filter(item => item.product._id !== productId);
+    setCartItems(updatedCartItems);
+  } catch (error) {
+    console.error('Error removing item from cart:', error);
+  }
+};
+
+
 
   const handleProceedToBuy = () => {
     // Add your logic here for proceeding to buy
@@ -250,6 +332,8 @@ const ProductList = () => {
                     <h5 className="card-title">{product.name}</h5>
                     <p className="card-text">Price: Rs.{product.price}</p>
                     <p className="card-text">Category: {product.category}</p>
+                    
+
                     <Button variant="success" onClick={() => handleAddToCart(product)}>Add to Cart</Button>
                   </div>
                 </div>
@@ -266,8 +350,8 @@ const ProductList = () => {
         <Modal.Body>
   {cartItems.length > 0 ? (
     <div>
-      <p>User ID: {userId}</p>
-      <p>Username: {username}</p> {/* Display username */}
+      <p>User_ID: {userId}</p>
+      <p>User_Name: {username}</p> {/* Display username */}
       <ul className="list-group">
         {cartItems.map((item) => (
           <li key={item._id} className="list-group-item d-flex justify-content-between align-items-center">
@@ -275,8 +359,16 @@ const ProductList = () => {
               {/* Access product details */}
               Product_Name: {item.product.name} <br />
               Product_Price: Rs.{item.product.price} <br />
-              Quantity: {item.quantity} <br />
+              {/* Quantity display with increase and decrease buttons */}
+              Quantity: 
+                      <Button variant="success" onClick={() => decreaseQuantity(item.product._id)}><FaMinus style={{ fontSize: '10px' }} /></Button>
+                      <span className="mx-2">{item.quantity}</span>
+                      <Button variant="success" onClick={() => increaseQuantity(item.product._id)}><FaPlus style={{ fontSize: '10px' }} /></Button>
+                      <Button variant="danger" onClick={() => handleRemoveFromCart (item.product._id)}>Remove</Button> {/* Remove button */}
+           
+                      <br />
               Total Price: Rs.{item.product.price * item.quantity} {/* Calculate total price */}
+
             </div>
           </li>
         ))}
@@ -288,7 +380,9 @@ const ProductList = () => {
 </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseCartModal}>
+        {/* Display total cart price */}
+        <p>Total Cart Price: Rs. {cartTotalPrice.toFixed(2)}</p>
+                <Button variant="secondary" onClick={handleCloseCartModal}>
             Close
           </Button>
           <Button variant="primary" onClick={handleProceedToBuy}>
