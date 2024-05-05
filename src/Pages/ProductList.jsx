@@ -4,6 +4,9 @@ import { Button,Modal,Carousel } from 'react-bootstrap';
 import { FaShoppingCart } from 'react-icons/fa'; 
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import LoginModal from './LoginModal';
+import { Link } from 'react-router-dom';
+
+
 
 const API_URL = 'http://localhost:5000'; 
 
@@ -14,12 +17,14 @@ const ProductList = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showCartModal, setShowCartModal] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [cartItemsCount, setCartItemsCount] = useState(0);
+  // const [cartItemsCount, setCartItemsCount] = useState(0);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
   const [cartTotalPrice, setCartTotalPrice] = useState(0);
+   const [redirectToCheckout, setRedirectToCheckout] = useState(false);
+
 
   const fetchProducts = async () => {
     try {
@@ -138,34 +143,29 @@ const ProductList = () => {
       setShowLoginModal(true);
     }
   };
+  
 
+  const updateCartQuantity = async (productId, quantity) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/update-cart-quantity/${userId}/${productId}`,
+        { quantity },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
 
-  // Function to update cart item quantity
-  // Function to update cart item quantity
-const updateCartQuantity = async (productId, quantity) => {
-  try {
-    const response = await axios.put(
-      `${API_URL}/update-cart-quantity/${userId}/${productId}`,
-      { quantity },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Send JWT token
-        },
-      }
-    );
+      console.log(response.data); // Log success message or handle accordingly
+      // Update total cart price based on the response from the backend
+      setCartTotalPrice(response.data.cart.totalPrice);
+      
+    } catch (error) {
+      console.error('Error updating cart item quantity:', error);
+    }
+  };
 
-    console.log(response.data); // Log success message or handle accordingly
-    // Update total cart price based on the response from the backend
-    setCartTotalPrice(response.data.cart.totalPrice);
-    // Refresh cart details after updating quantity
-    handleShowCartModal();
-  } catch (error) {
-    console.error('Error updating cart item quantity:', error);
-  }
-};
-
-
-  // Function to increase quantity
   const increaseQuantity = (productId) => {
     const updatedItems = cartItems.map(item => {
       if (item.product._id === productId) {
@@ -177,7 +177,6 @@ const updateCartQuantity = async (productId, quantity) => {
     setCartItems(updatedItems); // Update state
   };
   
-  // Function to decrease quantity
   const decreaseQuantity = (productId) => {
     const updatedItems = cartItems.map(item => {
       if (item.product._id === productId && item.quantity > 1) {
@@ -188,6 +187,8 @@ const updateCartQuantity = async (productId, quantity) => {
     });
     setCartItems(updatedItems); // Update state
   };
+
+  
   // Update handleRemoveFromCart function in ProductList.js
   const handleRemoveFromCart = async (productId) => {
     try {
@@ -254,12 +255,9 @@ const updateCartQuantity = async (productId, quantity) => {
   
 
 
-  const handleProceedToBuy = () => {
-    // Add your logic here for proceeding to buy
-    console.log('Proceeding to buy...'); // Placeholder action
-    // You can navigate to the checkout page or perform other actions
+  const handleCheckout = () => {
+    setRedirectToCheckout(true);
   };
-  
 
  
 
@@ -423,18 +421,13 @@ const updateCartQuantity = async (productId, quantity) => {
             Close
           </Button>
           <Button variant="danger" onClick={clearCart}>Clear Cart</Button>
-          <Button variant="primary" onClick={handleProceedToBuy}>
-                Proceed to Buy
-           </Button>
+          <br></br>
+          <Link to="/checkout" className="btn btn-primary">
+            Checkout
+          </Link>
+      
         </Modal.Footer>
       </Modal>
-
-
-      
-
-      
-
-
       {/* Login Modal */}
       <LoginModal isOpen={showLoginModal} 
       onClose={() => setShowLoginModal(false)} 

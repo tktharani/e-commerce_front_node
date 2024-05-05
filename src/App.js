@@ -29,6 +29,7 @@ function App() {
           <Route path="/admin" element={<Sidebar />} />
           <Route path="/users/view/:userId" element={<UserViewModal />} />
           <Route path="/users/edit/:userId" element={<UserEditModal />} />
+          
         </Routes>
       </BrowserRouter>
     </div>
