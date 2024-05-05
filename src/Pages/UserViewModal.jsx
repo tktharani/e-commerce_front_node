@@ -34,6 +34,7 @@ const UserViewModal = ({ show, handleClose, userId }) => {
             <p>Email: {userData.email}</p>
             <p>Full Name: {userData.fullName}</p>
             <p>Password: {userData.password}</p>
+            <p>Phone_number:{userData.phonenumber}</p>
             <p>Role: {userData.role}</p>
             {userData.address ? (
               <>

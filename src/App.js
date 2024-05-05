@@ -13,6 +13,7 @@ import AddProductForm from './Pages/AddProductForm';
 import LoginModal from './Pages/LoginModal';
 import RegisterPage from './Pages/RegisterPage';
 import ProductPages from './Pages/ProductPages'; 
+import PaymentForm from './Pages/PaymentForm';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/admin" element={<Sidebar />} />
           <Route path="/users/view/:userId" element={<UserViewModal />} />
           <Route path="/users/edit/:userId" element={<UserEditModal />} />
+          <Route path="/payment-form" element={<PaymentForm />} />
           
         </Routes>
       </BrowserRouter>

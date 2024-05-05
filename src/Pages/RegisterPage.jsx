@@ -7,6 +7,7 @@ const RegisterPage = () => {
         password: "",
         email: "",
         fullName: "",
+        phonenumber:"",
         role: "user",
         // Add address fields to the form state
         street: "",
@@ -25,7 +26,7 @@ const RegisterPage = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (!formData.username || !formData.password || !formData.email || !formData.fullName) {
+        if (!formData.username || !formData.password || !formData.email || !formData.fullName ||!formData.phonenumber) {
             alert("Please fill in all fields");
             return;
         }
@@ -65,6 +66,7 @@ const RegisterPage = () => {
                 password: "",
                 email: "",
                 fullName: "",
+                phonenumber:"",
                 // Reset address fields
                 street: "",
                 city: "",
@@ -126,6 +128,15 @@ const RegisterPage = () => {
                                 <input type="email" name="email" id="email" className="form-control" value={formData.email} onChange={handleChange} />
                                 {errors && errors.map((error, index) => (
                                     error.param === 'email' && <p key={index} className="text-danger">{error.msg}</p>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <label htmlFor="phonenumber" className="col-sm-3 col-form-label">PhoneNumber</label>
+                            <div className="col-sm-9">
+                                <input type="phonenumber" name="phonenumber" id="phonenumber" className="form-control" value={formData.phonenumber} onChange={handleChange} />
+                                {errors && errors.map((error, index) => (
+                                    error.param === 'phonenumber' && <p key={index} className="text-danger">{error.msg}</p>
                                 ))}
                             </div>
                         </div>

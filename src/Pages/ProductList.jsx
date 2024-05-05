@@ -5,6 +5,8 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import LoginModal from './LoginModal';
 import { Link } from 'react-router-dom';
+import PaymentForm from './PaymentForm';
+
 
 
 
@@ -23,8 +25,8 @@ const ProductList = () => {
   const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
   const [cartTotalPrice, setCartTotalPrice] = useState(0);
-   const [redirectToCheckout, setRedirectToCheckout] = useState(false);
-
+  
+  
 
   const fetchProducts = async () => {
     try {
@@ -60,6 +62,8 @@ const ProductList = () => {
         setUserId(storedUserId);
     }
 }, []);
+// Debug statement to check userId before passing to PaymentForm
+console.log('User ID before passing:', userId);
 
   // Update handleAddToCart function in ProductList.js
   const handleAddToCart = async (product) => {
@@ -134,6 +138,7 @@ const ProductList = () => {
         
          setCartItems(cartResponse.data.products);
          setCartTotalPrice(cartResponse.data.totalPrice); 
+         console.log('Cart Total Price:', cartTotalPrice);
         
         setShowCartModal(true);
       } catch (error) {
@@ -252,15 +257,8 @@ const ProductList = () => {
       
     }
   };
-  
-
-
-  const handleCheckout = () => {
-    setRedirectToCheckout(true);
-  };
-
  
-
+  
   const handleCloseLoginModal = () => {
     setShowLoginModal(false);
   };
@@ -422,12 +420,17 @@ const ProductList = () => {
           </Button>
           <Button variant="danger" onClick={clearCart}>Clear Cart</Button>
           <br></br>
-          <Link to="/checkout" className="btn btn-primary">
-            Checkout
-          </Link>
+          <Link to="/payment-form">
+          <Button variant="primary">Proceed To Buy</Button>
+        </Link>
+
       
         </Modal.Footer>
       </Modal>
+
+      // Assuming you have the userId available in your component or Redux state
+          <PaymentForm userId={userId} />   
+
       {/* Login Modal */}
       <LoginModal isOpen={showLoginModal} 
       onClose={() => setShowLoginModal(false)} 

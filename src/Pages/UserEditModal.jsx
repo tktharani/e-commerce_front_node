@@ -7,6 +7,7 @@ const UserEditModal = ({ show, handleClose, userId, handleUpdate }) => {
     email: '',
     password: '',
     fullName: '',
+    phonenumber:'',
     role: '',
     // Add address fields
     street: '',
@@ -84,6 +85,10 @@ const UserEditModal = ({ show, handleClose, userId, handleUpdate }) => {
               <div className="mb-3">
                 <label htmlFor="fullName" className="form-label">Full Name:</label>
                 <input type="text" className="form-control" id="fullName" name="fullName" value={formData.fullName} onChange={handleChange} />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="phonenumber" className="form-label">Phone_Number:</label>
+                <input type="text" className="form-control" id="phonenumber" name="phonenumber" value={formData.phonenumber} onChange={handleChange} />
               </div>
               <div className="mb-3">
                 <label htmlFor="role" className="form-label">Role:</label>
