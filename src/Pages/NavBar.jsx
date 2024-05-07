@@ -1,15 +1,11 @@
-import React, { useState,useEffect } from 'react';
-import {  FaSearch } from 'react-icons/fa';
-import SearchBar from './SearchBar';
+import React, { useState } from 'react';
 import './NavBar.css';
 import LoginModal from './LoginModal';
 
 const NavBar = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
-    const handleSearch = (e) => {
-        console.log('Search query:', e.target.value);
-    };
 
     const handleLogin = () => {
         // console.log("Login clicked")
@@ -22,7 +18,17 @@ const NavBar = () => {
         // Logic to handle successful login, e.g., update user information
         setIsModalOpen(false);
          // Close the modal after successful login
-         console.log('isModalOpen:', isModalOpen); 
+        //  console.log('isModalOpen:', isModalOpen); 
+    };
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleSearchSubmit = (event) => {
+        event.preventDefault();
+        // Add your search logic here, such as navigating to a search results page or filtering products
+        console.log('Search term:', searchTerm);
+        setSearchTerm('');
     };
 
 
@@ -31,14 +37,23 @@ const NavBar = () => {
     return (
         <nav className="navbar">
             <div className="logo">
-                <img src="/images/icon-5.jpg" alt="Logo" />
+                <img src="/images/icon-12.avif" alt="Logo" />
             </div>
-            <div className="search-bar">
-                <FaSearch className="search-icon" />
-                <SearchBar onChange={handleSearch} />
-            </div>
+            <form onSubmit={handleSearchSubmit} className="search-form">
+                <input
+                    type="text"
+                    placeholder="Search"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+                <button type="submit">Search</button>
+            </form>
+            
             <div className="nav-links">
-                <button onClick={handleLogin}>Login</button>
+            <a href="/">Home</a>
+                <a href="/">Products</a>
+                <a href="/">Contact Us</a>
+                <button onClick={handleLogin}>Login/Register</button>
                 
             </div>
             {isModalOpen && (

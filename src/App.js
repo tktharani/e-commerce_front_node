@@ -14,11 +14,16 @@ import LoginModal from './Pages/LoginModal';
 import RegisterPage from './Pages/RegisterPage';
 import ProductPages from './Pages/ProductPages'; 
 import PaymentForm from './Pages/PaymentForm';
+import Footer from './Pages/Footer';
+import PlaceOrder from './Pages/PlaceOrder';
+import CartDetails from './Pages/CartDetails';
+
 
 function App() {
   return (
     <div className="App">
       <NavBar />
+      
       <BrowserRouter>
         <Routes>
         
@@ -31,9 +36,13 @@ function App() {
           <Route path="/users/view/:userId" element={<UserViewModal />} />
           <Route path="/users/edit/:userId" element={<UserEditModal />} />
           <Route path="/payment-form" element={<PaymentForm />} />
-          
+          <Route path="/place-order" element={<PlaceOrder />} />
+          <Route path="/admin/carts" element={<CartDetails />} />
+                 
+                 
         </Routes>
       </BrowserRouter>
+     
     </div>
   );
 }

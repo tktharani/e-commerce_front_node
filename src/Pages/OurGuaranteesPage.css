@@ -1,0 +1,5 @@
+.custom-img {
+    max-width:20%; /* Set maximum width to control image size */
+    height: auto; /* Maintain aspect ratio */
+  }
+  

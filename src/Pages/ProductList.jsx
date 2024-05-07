@@ -5,15 +5,14 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import LoginModal from './LoginModal';
 import { Link } from 'react-router-dom';
-import PaymentForm from './PaymentForm';
-
-
-
+import PopularBrands from './PopularBrand';
+import AboutUsPage from './AboutUs';
+import OurGuaranteesPage from './OurGuranatees';
+import Footer from './Footer';
 
 const API_URL = 'http://localhost:5000'; 
-
-
 const ProductList = () => {
+  
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -148,8 +147,32 @@ console.log('User ID before passing:', userId);
       setShowLoginModal(true);
     }
   };
+  const increaseQuantity = async (productId) => {
+    const updatedItems = cartItems.map(async (item) => {
+      if (item.product._id === productId) {
+        item.quantity += 1; // Increase quantity
+        await updateCartQuantity(productId, item.quantity); // Update quantity in the backend
+      }
+      return item;
+    });
+    // Wait for all updates to complete
+    const updatedCartItems = await Promise.all(updatedItems);
+    setCartItems(updatedCartItems); // Update state
+  };
   
-
+  const decreaseQuantity = async (productId) => {
+    const updatedItems = cartItems.map(async (item) => {
+      if (item.product._id === productId && item.quantity > 1) {
+        item.quantity -= 1; // Decrease quantity
+        await updateCartQuantity(productId, item.quantity); // Update quantity in the backend
+      }
+      return item;
+    });
+    // Wait for all updates to complete
+    const updatedCartItems = await Promise.all(updatedItems);
+    setCartItems(updatedCartItems); // Update state
+  };
+  
   const updateCartQuantity = async (productId, quantity) => {
     try {
       const response = await axios.put(
@@ -161,38 +184,42 @@ console.log('User ID before passing:', userId);
           },
         }
       );
-
+  
       console.log(response.data); // Log success message or handle accordingly
       // Update total cart price based on the response from the backend
       setCartTotalPrice(response.data.cart.totalPrice);
-      
+  
+      // Fetch updated cart details
+      await fetchCartDetails();
     } catch (error) {
       console.error('Error updating cart item quantity:', error);
     }
   };
-
-  const increaseQuantity = (productId) => {
-    const updatedItems = cartItems.map(item => {
-      if (item.product._id === productId) {
-        item.quantity += 1; // Increase quantity
-        updateCartQuantity(productId, item.quantity); // Update quantity in the backend
+  
+  const fetchCartDetails = async () => {
+    try {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        console.error('User ID not found in localStorage');
+        return;
       }
-      return item;
-    });
-    setCartItems(updatedItems); // Update state
+  
+      // Fetch cart details
+      const cartResponse = await axios.get(`${API_URL}/cart-details/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+  
+      setCartItems(cartResponse.data.products);
+      setCartTotalPrice(cartResponse.data.totalPrice);
+    } catch (error) {
+      console.error('Error fetching cart details:', error);
+    }
   };
   
-  const decreaseQuantity = (productId) => {
-    const updatedItems = cartItems.map(item => {
-      if (item.product._id === productId && item.quantity > 1) {
-        item.quantity -= 1; // Decrease quantity
-        updateCartQuantity(productId, item.quantity); // Update quantity in the backend
-      }
-      return item;
-    });
-    setCartItems(updatedItems); // Update state
-  };
 
+  
   
   // Update handleRemoveFromCart function in ProductList.js
   const handleRemoveFromCart = async (productId) => {
@@ -312,6 +339,7 @@ console.log('User ID before passing:', userId);
         </Carousel.Item>
        
       </Carousel>
+      <br></br>
       {/* End Bootstrap Carousel */}
       <div className="row ">
         <div className="col-md-3">
@@ -324,34 +352,33 @@ console.log('User ID before passing:', userId);
             <option value="vegetables">Vegetables</option>
             {/* Add more categories as needed */}
           </select>
+          <br></br>
           {/* Cart Icon */}
-          <div className="position-fixed top-0 end-0 m-5  p-5">
-              <div
-                className="cart-icon d-flex justify-content-center align-items-center position-relative"
-                style={{
-                  width: '50px',
-                  height: '50px',
-                  background: 'blue',
-                  color: 'white',
-                  borderRadius: '70%',
-                  cursor: 'pointer',
-                }}
-                onClick= {handleShowCartModal}
-              >
-              <FaShoppingCart size={24} />
-          {/* Show cart item count badge */}
-          {cartItems.length > 0 && (
-            <span
-              className="cart-count position-absolute end-0 top-100 translate-middle badge rounded-pill bg-success"
-              style={{ fontSize: '14px' }}
-            >
-              {cartItems.length}
-            </span>
-          )}
-        </div>
-      </div>
-                
-
+          <div className="fixed-cart-icon">
+                <div
+                    className="cart-icon d-flex justify-content-center align-items-center position-relative"
+                    style={{
+                        width: '50px',
+                        height: '50px',
+                        background: 'blue',
+                        color: 'white',
+                        borderRadius: '70%',
+                        cursor: 'pointer',
+                    }}
+                    onClick={handleShowCartModal}
+                >
+                    <FaShoppingCart size={24} />
+                    {/* Show cart item count badge */}
+                    {cartItems.length > 0 && (
+                        <span
+                            className="cart-count position-absolute end-0 top-100 translate-middle badge rounded-pill bg-success"
+                            style={{ fontSize: '14px' }}
+                        >
+                            {cartItems.length}
+                        </span>
+                    )}
+                </div>
+            </div>
         </div>
         <div className="col-md-9">
           <h1 className="mt-3">Product List</h1>
@@ -427,19 +454,27 @@ console.log('User ID before passing:', userId);
       
         </Modal.Footer>
       </Modal>
-
-      // Assuming you have the userId available in your component or Redux state
-          <PaymentForm userId={userId} />   
-
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <AboutUsPage />
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <OurGuaranteesPage />
+        <br></br>
+        <br></br>
+      <PopularBrands />
+      <Footer />
       {/* Login Modal */}
       <LoginModal isOpen={showLoginModal} 
       onClose={() => setShowLoginModal(false)} 
       onLogin={() => setIsLoggedIn(true)} />
-
-
-            
-      
     </div>
+    
   );
 };
 

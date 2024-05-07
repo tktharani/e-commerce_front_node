@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiHome, FiUsers, FiShoppingCart, FiPlusCircle } from 'react-icons/fi';
+import { BsClipboardData } from 'react-icons/bs';
+
 import axios from 'axios';
 import './Sidebar.css';
 import UserViewModal from './UserViewModal';
@@ -147,6 +149,16 @@ const Sidebar = () => {
             >
               <FiPlusCircle className="sidebar-icon" />
               Add Product
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/admin/carts"
+              className={`sidebar-link ${activeLink === 'orders' ? 'active' : ''}`}
+              onClick={() => handleSetActiveLink('orders')}
+            >
+              <BsClipboardData className="sidebar-icon" />
+              Orders
             </Link>
           </li>
         </ul>
