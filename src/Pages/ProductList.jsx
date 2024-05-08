@@ -9,6 +9,7 @@ import PopularBrands from './PopularBrand';
 import AboutUsPage from './AboutUs';
 import OurGuaranteesPage from './OurGuranatees';
 import Footer from './Footer';
+import NavBar from './NavBar';
 
 const API_URL = 'http://localhost:5000'; 
 const ProductList = () => {
@@ -292,6 +293,7 @@ console.log('User ID before passing:', userId);
   
   return (
     <div className="container m-5">
+      <NavBar />
       {/* Custom styles for reducing Carousel height */}
       
       <style>{`
@@ -308,6 +310,14 @@ console.log('User ID before passing:', userId);
 
     {/* Bootstrap Carousel */}
       <Carousel fade className="mb-4">
+      <Carousel.Item>
+          <img
+            className="d-block w-100"
+            src="images/c-6.webp"
+            alt="Thrid slide"
+          />
+        </Carousel.Item>
+       
         <Carousel.Item>
           <img
             className="d-block w-100"
@@ -322,22 +332,7 @@ console.log('User ID before passing:', userId);
             alt="Second slide"
           />
         </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="images/c-1.webp"
-            alt="Thrid slide"
-          />
-        </Carousel.Item>
-
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="images/c-6.webp"
-            alt="Thrid slide"
-          />
-        </Carousel.Item>
-       
+        
       </Carousel>
       <br></br>
       {/* End Bootstrap Carousel */}
@@ -360,8 +355,8 @@ console.log('User ID before passing:', userId);
                     style={{
                         width: '50px',
                         height: '50px',
-                        background: 'blue',
-                        color: 'white',
+                        background: 'green',
+                        color: 'pink',
                         borderRadius: '70%',
                         cursor: 'pointer',
                     }}
@@ -371,7 +366,7 @@ console.log('User ID before passing:', userId);
                     {/* Show cart item count badge */}
                     {cartItems.length > 0 && (
                         <span
-                            className="cart-count position-absolute end-0 top-100 translate-middle badge rounded-pill bg-success"
+                            className="cart-count position-absolute end-0 top-100 translate-middle badge rounded-pill bg-warning"
                             style={{ fontSize: '14px' }}
                         >
                             {cartItems.length}
@@ -468,6 +463,8 @@ console.log('User ID before passing:', userId);
         <br></br>
         <br></br>
       <PopularBrands />
+      <br></br>
+      <br></br>
       <Footer />
       {/* Login Modal */}
       <LoginModal isOpen={showLoginModal} 

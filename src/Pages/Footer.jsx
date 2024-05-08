@@ -4,9 +4,9 @@ import { faFacebookF, faTwitter, faInstagram, faLinkedin } from '@fortawesome/fr
 
 const Footer = () => {
     return (
-        <footer className=" container-fluid bg-success text-dark py-4">
-            <div className="container">
-                <div className="row">
+        <footer className="bg text-dark">
+            <div className="container-fluid p-5">
+                <div className="row mx-0">
                     <div className="col-md-4">
                         <h5>Contact Us</h5>
                         <p>Email: example@example.com</p>
@@ -32,8 +32,8 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="row mt-3">
-                    <div className="col">
-                        <p className="text-center">&copy; 2024 Your Company. All rights reserved.</p>
+                    <div className="col text-center">
+                        <p>&copy; 2024 Your Company. All rights reserved.</p>
                     </div>
                 </div>
             </div>

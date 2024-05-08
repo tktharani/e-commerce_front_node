@@ -1,10 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min'; // Corrected import for Bootstrap JS
 
-import NavBar from './Pages/NavBar';
+
 import Sidebar from './Pages/Sidebar';
 import UserViewModal from './Pages/UserViewModal';
 import ProductList from './Pages/ProductList';
@@ -14,7 +14,6 @@ import LoginModal from './Pages/LoginModal';
 import RegisterPage from './Pages/RegisterPage';
 import ProductPages from './Pages/ProductPages'; 
 import PaymentForm from './Pages/PaymentForm';
-import Footer from './Pages/Footer';
 import PlaceOrder from './Pages/PlaceOrder';
 import CartDetails from './Pages/CartDetails';
 
@@ -22,7 +21,7 @@ import CartDetails from './Pages/CartDetails';
 function App() {
   return (
     <div className="App">
-      <NavBar />
+      
       
       <BrowserRouter>
         <Routes>
@@ -37,7 +36,7 @@ function App() {
           <Route path="/users/edit/:userId" element={<UserEditModal />} />
           <Route path="/payment-form" element={<PaymentForm />} />
           <Route path="/place-order" element={<PlaceOrder />} />
-          <Route path="/admin/carts" element={<CartDetails />} />
+          <Route path="/admin/cart" element={<CartDetails />} />
                  
                  
         </Routes>

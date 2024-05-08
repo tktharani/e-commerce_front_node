@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiHome, FiUsers, FiShoppingCart, FiPlusCircle } from 'react-icons/fi';
+import { FiHome, FiUsers, FiShoppingCart, FiPlusCircle,FiLogOut } from 'react-icons/fi';
 import { BsClipboardData } from 'react-icons/bs';
 
 import axios from 'axios';
@@ -100,11 +100,21 @@ const Sidebar = () => {
     setShowAddProductForm(false);
   };
 
+  // Logout function
+  const handleLogout = () => {
+    // Perform logout actions (e.g., clear session, remove tokens)
+    // Redirect to the home page
+    window.location.href = '/'; // This will reload the page and navigate to the home page
+  };
+
   return (
     <div className="sidebar-container">
       <div className="sidebar">
         <div className="sidebar-header">
           <h3>Admin Dashboard</h3>
+          <button className="logout-button" onClick={handleLogout}>
+            <FiLogOut className="logout-icon" />
+          </button>
         </div>
         <ul className="sidebar-menu">
           <li>
@@ -153,7 +163,7 @@ const Sidebar = () => {
           </li>
           <li>
             <Link
-              to="/admin/carts"
+              to="/admin/cart"
               className={`sidebar-link ${activeLink === 'orders' ? 'active' : ''}`}
               onClick={() => handleSetActiveLink('orders')}
             >
@@ -186,7 +196,7 @@ const Sidebar = () => {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Full Name</th>
-                <th>Role</th>
+                <th>Phone_Number</th>
                 <th>Address</th>
                 <th>Actions</th>
               </tr>
@@ -197,7 +207,7 @@ const Sidebar = () => {
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>{user.fullName}</td>
-                  <td>{user.role}</td>
+                  <td>{user.phonenumber}</td>
                   <td>
                       {user.address ? (
                         <div>

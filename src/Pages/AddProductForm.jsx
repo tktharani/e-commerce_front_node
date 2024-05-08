@@ -132,6 +132,7 @@ const AddProductForm = ({ handleAddProduct }) => {
                 className="form-control"
                 id="productName"
                 name="productName"
+                placeholder="Enter product name"
                 value={productName}
                 onChange={(e) => setProductName(e.target.value)}
                 required
@@ -144,6 +145,7 @@ const AddProductForm = ({ handleAddProduct }) => {
                 type="text"
                 className="form-control"
                 id="description"
+                placeholder="Enter Description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
@@ -156,6 +158,7 @@ const AddProductForm = ({ handleAddProduct }) => {
                 type="number"
                 className="form-control"
                 id="price"
+                placeholder="Enter product price"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 required

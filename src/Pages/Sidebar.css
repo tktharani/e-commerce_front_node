@@ -108,3 +108,32 @@
   border-left: 4px solid aqua;
   margin-left: -4px;
 }
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+}
+
+.logout-wrapper {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px; /* Adjust the width as needed */
+  height: 40px; /* Adjust the height as needed */
+  border-radius: 50%;
+  background-color: #ddd;
+  transition: background-color 0.3s ease;
+}
+
+.logout-wrapper:hover {
+  background-color: #ccc; /* Change color on hover if desired */
+}
+
+.logout-icon {
+  color: #333;
+  font-size: 20px;
+}

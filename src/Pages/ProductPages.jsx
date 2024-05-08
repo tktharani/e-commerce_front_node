@@ -91,6 +91,8 @@ const ProductsPage = () => {
   };
 
   return (
+    <div>
+      <h2 className='text-center text-success'>Product Table</h2>
     <div className="products-page">
       <input
         type="text"
@@ -178,6 +180,7 @@ const ProductsPage = () => {
         onHide={closeEditModal}
       />
     </div>
+  </div>
   );
 };
 
