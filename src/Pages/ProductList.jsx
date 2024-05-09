@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button,Modal,Carousel } from 'react-bootstrap';
@@ -148,11 +149,13 @@ console.log('User ID before passing:', userId);
       setShowLoginModal(true);
     }
   };
+
   const increaseQuantity = async (productId) => {
     const updatedItems = cartItems.map(async (item) => {
       if (item.product._id === productId) {
-        item.quantity += 1; // Increase quantity
-        await updateCartQuantity(productId, item.quantity); // Update quantity in the backend
+        const updatedQuantity = item.quantity + 1; // Increase quantity
+        await updateCartQuantity(productId, updatedQuantity); // Update quantity in the backend
+        item.quantity = updatedQuantity; // Update local quantity
       }
       return item;
     });
@@ -164,8 +167,9 @@ console.log('User ID before passing:', userId);
   const decreaseQuantity = async (productId) => {
     const updatedItems = cartItems.map(async (item) => {
       if (item.product._id === productId && item.quantity > 1) {
-        item.quantity -= 1; // Decrease quantity
-        await updateCartQuantity(productId, item.quantity); // Update quantity in the backend
+        const updatedQuantity = item.quantity - 1; // Decrease quantity
+        await updateCartQuantity(productId, updatedQuantity); // Update quantity in the backend
+        item.quantity = updatedQuantity; // Update local quantity
       }
       return item;
     });
@@ -186,7 +190,7 @@ console.log('User ID before passing:', userId);
         }
       );
   
-      console.log(response.data); // Log success message or handle accordingly
+      console.log(response.data); 
       // Update total cart price based on the response from the backend
       setCartTotalPrice(response.data.cart.totalPrice);
   
@@ -196,6 +200,7 @@ console.log('User ID before passing:', userId);
       console.error('Error updating cart item quantity:', error);
     }
   };
+  
   
   const fetchCartDetails = async () => {
     try {
@@ -355,8 +360,8 @@ console.log('User ID before passing:', userId);
                     style={{
                         width: '50px',
                         height: '50px',
-                        background: 'green',
-                        color: 'pink',
+                        background: 'grey',
+                        color: 'white',
                         borderRadius: '70%',
                         cursor: 'pointer',
                     }}
@@ -366,7 +371,7 @@ console.log('User ID before passing:', userId);
                     {/* Show cart item count badge */}
                     {cartItems.length > 0 && (
                         <span
-                            className="cart-count position-absolute end-0 top-100 translate-middle badge rounded-pill bg-warning"
+                            className="cart-count position-absolute end-0 top-100 translate-middle badge rounded-pill bg-primary"
                             style={{ fontSize: '14px' }}
                         >
                             {cartItems.length}
@@ -376,7 +381,7 @@ console.log('User ID before passing:', userId);
             </div>
         </div>
         <div className="col-md-9">
-          <h1 className="mt-3">Product List</h1>
+          <h1 className="mt-3">Products</h1>
           <div className="row mt-3">
             {filteredProducts.map(product => (
               <div key={product._id} className="col-md-4 mb-3">
