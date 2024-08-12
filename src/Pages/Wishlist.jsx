@@ -24,6 +24,27 @@ const WishlistPage = () => {
     fetchWishlistItems();
   }, []);
 
+
+  const removeFromWishlist = async (productId) => {
+    try {
+      const userId = localStorage.getItem('userId');
+      await axios.post(`http://localhost:5000/wishlist/remove`, 
+        { userId, productId },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+
+      // Update the wishlist items state after removal
+      setWishlistItems(wishlistItems.filter(item => item._id !== productId));
+      alert("Product will be removed successfully");
+    } catch (error) {
+      console.error('Error removing item from wishlist:', error);
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h1>My Wishlist</h1>
@@ -43,7 +64,13 @@ const WishlistPage = () => {
               <p>Category: {item.category}</p>
               <img src={`http://localhost:5000/public/data/uploads/${item.image}`} 
               className="card-img-top" alt={item.name} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-   
+
+            <button 
+                className="btn btn-danger btn-sm mt-2" 
+                onClick={() => removeFromWishlist(item._id)}
+              >
+                Remove
+              </button>
         
             </div>
           </li>
