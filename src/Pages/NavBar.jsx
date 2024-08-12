@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './NavBar.css';
+import { Link } from 'react-router-dom';
 import LoginModal from './LoginModal';
+
 
 const NavBar = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,7 +39,9 @@ const NavBar = () => {
     return (
         <nav className="navbar">
             <div className="logo">
-                <img src="/images/icon-12.avif" alt="Logo" />
+                <Link to="/">
+                    <img src="/images/icon-12.avif" alt="Logo" />
+                </Link>
             </div>
             <form onSubmit={handleSearchSubmit} className="search-form">
                 <input
@@ -45,23 +49,28 @@ const NavBar = () => {
                     placeholder="Search"
                     value={searchTerm}
                     onChange={handleSearchChange}
+                    aria-label="Search"
                 />
-                <button type="submit">Search</button>
+                <button type="submit" aria-label="Submit search">Search</button>
             </form>
-            
             <div className="nav-links">
-            <a href="/">Home</a>
-                <a href="/">Products</a>
-                <a href="/">Contact Us</a>
-                <button onClick={handleLogin}>Login/Register</button>
-                
+                <Link to="/">Home</Link>
+                <Link to="/products">Products</Link>
+                <Link to="/contact">Contact Us</Link>
+                <button onClick={handleLogin} aria-label="Login/Register">Login/Register</button>
+                <Link to="/wishlist" aria-label="Wishlist">
+                    <i className="fas fa-heart"></i> {/* Font Awesome heart icon */}
+                </Link>
             </div>
             {isModalOpen && (
                 <div className="modal-overlay">
-                    <LoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onLogin={handleSuccessfulLogin} />
+                    <LoginModal 
+                        isOpen={isModalOpen} 
+                        onClose={() => setIsModalOpen(false)} 
+                        onLogin={handleSuccessfulLogin} 
+                    />
                 </div>
             )}
-              
         </nav>
     );
 };

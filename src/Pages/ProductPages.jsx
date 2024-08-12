@@ -90,6 +90,8 @@ const ProductsPage = () => {
     setSearchTerm(event.target.value);
   };
 
+  
+
   return (
     <div>
       <h2 className='text-center text-success'>Product Table</h2>

@@ -3,6 +3,8 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min'; // Corrected import for Bootstrap JS
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 
 
 import Sidebar from './Pages/Sidebar';
@@ -16,6 +18,7 @@ import ProductPages from './Pages/ProductPages';
 import PaymentForm from './Pages/PaymentForm';
 import PlaceOrder from './Pages/PlaceOrder';
 import CartDetails from './Pages/CartDetails';
+import Wishlist from './Pages/Wishlist'
 
 
 function App() {
@@ -37,6 +40,9 @@ function App() {
           <Route path="/payment-form" element={<PaymentForm />} />
           <Route path="/place-order" element={<PlaceOrder />} />
           <Route path="/admin/cart" element={<CartDetails />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          
+          
                  
                  
         </Routes>

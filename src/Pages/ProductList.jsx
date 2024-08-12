@@ -12,6 +12,8 @@ import OurGuaranteesPage from './OurGuranatees';
 import Footer from './Footer';
 import NavBar from './NavBar';
 
+import { FaHeart } from 'react-icons/fa'; // Import the heart icon
+
 const API_URL = 'http://localhost:5000'; 
 const ProductList = () => {
   
@@ -290,11 +292,44 @@ console.log('User ID before passing:', userId);
       
     }
   };
+
+   // Function to handle adding a product to the wishlist
+  const handleAddToWishlist = async (product) => {
+    if (isLoggedIn) {
+      try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          console.error('User ID not found in localStorage');
+          return;
+        }
+
+        const response = await axios.post(`${API_URL}/wishlist/add`, {
+          userId: userId,
+          productId: product._id,
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        console.log(response.data);
+        alert(`Product added to wishlist successfully!`);
+      } catch (error) {
+        console.error('Error adding product to wishlist:', error);
+      }
+    } else {
+      setShowLoginModal(true); // Show login modal if not logged in
+    }
+  };
+
  
   
   const handleCloseLoginModal = () => {
     setShowLoginModal(false);
   };
+  
+  
+
   
   return (
     <div className="container m-5">
@@ -392,9 +427,14 @@ console.log('User ID before passing:', userId);
                     <h5 className="card-title">{product.name}</h5>
                     <p className="card-text">Price: Rs.{product.price}</p>
                     <p className="card-text">Category: {product.category}</p>
-                    
-
                     <Button variant="success" onClick={() => handleAddToCart(product)}>Add to Cart</Button>
+                    <Button variant="outline-danger" onClick={() => handleAddToWishlist(product)}>
+                    <FaHeart
+          style={{ color: 'red', cursor: 'pointer', marginLeft: '10px' }}
+          onClick={() => handleAddToWishlist(product)}
+        />
+                    </Button> {/* Wishlist icon */}
+
                   </div>
                 </div>
               </div>
