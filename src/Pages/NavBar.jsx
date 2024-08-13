@@ -5,6 +5,7 @@ import LoginModal from './LoginModal';
 
 
 const NavBar = () => {
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -43,7 +44,7 @@ const NavBar = () => {
                     <img src="/images/icon-12.avif" alt="Logo" />
                 </Link>
             </div>
-            <form onSubmit={handleSearchSubmit} className="search-form">
+            {/* <form onSubmit={handleSearchSubmit} className="search-form">
                 <input
                     type="text"
                     placeholder="Search"
@@ -52,7 +53,7 @@ const NavBar = () => {
                     aria-label="Search"
                 />
                 <button type="submit" aria-label="Submit search">Search</button>
-            </form>
+            </form> */}
             <div className="nav-links">
                 <Link to="/">Home</Link>
                 <Link to="/products">Products</Link>
